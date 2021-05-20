@@ -1,5 +1,6 @@
 package com.tony.logistica.api.exceptionhandler;
 
+import com.tony.logistica.domain.exception.DomainException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -46,5 +48,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         problem.setFields(fields);
 
         return super.handleExceptionInternal(ex, problem, headers, status, request);
+    }
+
+    @ExceptionHandler(DomainException.class)
+    public ResponseEntity<Object> handleDomainException(DomainException dmEx, WebRequest request) {
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        Problem problem = new Problem();
+        problem.setStatus(status.value());
+        problem.setTimeStamp(LocalDateTime.now());
+        problem.setTitle(dmEx.getMessage());
+
+        return handleExceptionInternal(dmEx, problem, new HttpHeaders(), status, request);
     }
 }
