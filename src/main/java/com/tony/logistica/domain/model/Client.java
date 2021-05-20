@@ -1,19 +1,36 @@
 package com.tony.logistica.domain.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
-@Data
-@AllArgsConstructor
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Getter
+@Setter
+@Entity
 public class Client {
+
+    @EqualsAndHashCode.Include
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    //    @EqualsAndHashCode.Exclude
-    transient
+
+    @NotBlank
+    @Size(max = 60)
     private String name;
-    //    @EqualsAndHashCode.Exclude
-    transient
+
+    @NotBlank
+    @Email
+    @Size(max = 255)
     private String email;
-    //    @EqualsAndHashCode.Exclude
-    transient
+
+    @NotBlank
+    @Size(max = 20)
     private String phone;
 }
