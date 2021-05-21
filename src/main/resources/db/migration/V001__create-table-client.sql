@@ -1,8 +1,8 @@
-create table client (
-    id bigint not null auto_increment,
-    name varchar(60) not null,
-    email varchar(250) not null,
-    phone varchar(20) not null,
+CREATE TABLE client (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(60) NOT NULL,
+    email VARCHAR(250) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
 
-    primary key (id)
+    PRIMARY KEY (id)
 );

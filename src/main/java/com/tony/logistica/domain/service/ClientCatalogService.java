@@ -16,6 +16,11 @@ public class ClientCatalogService {
 
     private ClientRepository clientRepository;
 
+    public Client findClient(Long id) {
+        return  clientRepository.findById(id)
+                .orElseThrow(() -> new DomainException("Cliente não encontrado"));
+    }
+
     @Transactional
     public List<Client> getAllClients() {
         return clientRepository.findAll();
