@@ -14,13 +14,13 @@ import java.time.OffsetDateTime;
 
 @AllArgsConstructor
 @Service
-public class DeliveryRequestService {
+public class DeliveryService {
 
     private final ClientCatalogService clientCatalogService;
     private final DeliveryRepository deliveryRepository;
 
     @Transactional
-    public Delivery requestDelivery(Delivery delivery) {
+    public Delivery saveDelivery(Delivery delivery) {
 
         Client client = clientCatalogService.findClient(delivery.getClient().getId());
 

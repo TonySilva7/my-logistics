@@ -1,8 +1,10 @@
 package com.tony.logistica.api.controller;
 
+import com.tony.logistica.api.mappers.DeliverMapper;
+import com.tony.logistica.api.model.DeliveryDTO;
 import com.tony.logistica.domain.model.Delivery;
 import com.tony.logistica.domain.repository.DeliveryRepository;
-import com.tony.logistica.domain.service.DeliveryRequestService;
+import com.tony.logistica.domain.service.DeliveryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,25 +18,27 @@ import java.util.List;
 @RequestMapping("/deliveries")
 public class DeliveryController {
 
-    private final DeliveryRequestService deliveryRequestService;
+    private final DeliveryService deliveryService;
     private final DeliveryRepository deliveryRepository;
+    private final DeliverMapper deliverMapper;
 
     @GetMapping
-    public List<Delivery> getAllDeliver() {
-        return deliveryRepository.findAll();
+    public List<DeliveryDTO> getAllDeliveries() {
+
+        return deliverMapper.toCollectionDTO(deliveryRepository.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Delivery> getDeliverById(@PathVariable Long id) {
+    public ResponseEntity<DeliveryDTO> getDeliverById(@PathVariable Long id) {
         return deliveryRepository.findById(id)
-                .map(ResponseEntity::ok)
+                .map(delivery -> ResponseEntity.ok(deliverMapper.toDTO(delivery)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Delivery saveDelivery(@Valid @RequestBody Delivery delivery) {
-
-        return deliveryRequestService.requestDelivery(delivery);
+    public DeliveryDTO saveDelivery(@Valid @RequestBody Delivery delivery) {
+        Delivery deliveryRequest = deliveryService.saveDelivery(delivery);
+        return deliverMapper.toDTO(deliveryRequest);
     }
 }
