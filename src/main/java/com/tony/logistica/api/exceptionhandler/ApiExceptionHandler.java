@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         Problem problem = new Problem();
         problem.setStatus(status.value());
-        problem.setTimeStamp(LocalDateTime.now());
+        problem.setTimeStamp(OffsetDateTime.now());
         problem.setTitle("One or more fields are invalid");
 
         problem.setFields(fields);
@@ -56,7 +56,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         Problem problem = new Problem();
         problem.setStatus(status.value());
-        problem.setTimeStamp(LocalDateTime.now());
+        problem.setTimeStamp(OffsetDateTime.now());
         problem.setTitle(dmEx.getMessage());
 
         return handleExceptionInternal(dmEx, problem, new HttpHeaders(), status, request);
