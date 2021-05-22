@@ -13,8 +13,9 @@ import java.time.OffsetDateTime;
 public class DeliveryDTO {
 
     private Long id;
+    private ClientSummaryDTO client;
     private String clientName;
-    private RecipientDTO recipientDTO;
+    private RecipientDTO recipient;
     private BigDecimal fee;
     private DeliveryStatus status;
     private OffsetDateTime orderDate;

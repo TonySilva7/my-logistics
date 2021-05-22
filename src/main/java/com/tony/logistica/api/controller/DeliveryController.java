@@ -2,6 +2,7 @@ package com.tony.logistica.api.controller;
 
 import com.tony.logistica.api.mappers.DeliverMapper;
 import com.tony.logistica.api.model.DeliveryDTO;
+import com.tony.logistica.api.model.input.DeliveryInputDTO;
 import com.tony.logistica.domain.model.Delivery;
 import com.tony.logistica.domain.repository.DeliveryRepository;
 import com.tony.logistica.domain.service.DeliveryService;
@@ -37,8 +38,9 @@ public class DeliveryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public DeliveryDTO saveDelivery(@Valid @RequestBody Delivery delivery) {
-        Delivery deliveryRequest = deliveryService.saveDelivery(delivery);
+    public DeliveryDTO saveDelivery(@Valid @RequestBody DeliveryInputDTO deliveryInputDTO) {
+        Delivery newDelivery = deliverMapper.toEntity(deliveryInputDTO);
+        Delivery deliveryRequest = deliveryService.saveDelivery(newDelivery);
         return deliverMapper.toDTO(deliveryRequest);
     }
 }
