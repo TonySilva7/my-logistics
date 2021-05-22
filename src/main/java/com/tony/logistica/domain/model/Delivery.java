@@ -1,5 +1,6 @@
 package com.tony.logistica.domain.model;
 
+import com.tony.logistica.domain.exception.DomainException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,31 +22,22 @@ public class Delivery {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //@Valid
-    //@ConvertGroup(from = Default.class, to = ValidationGroups.ClientId.class)
-    //@NotNull
     @ManyToOne
     private Client client;
 
-    //@Valid
-    //@NotNull
     @Embedded
     private Recipient recipient;
 
-    //@NotNull
     private BigDecimal fee;
 
     @OneToMany(mappedBy = "delivery", cascade = CascadeType.ALL)
     private List<Occurrence> occurrences = new ArrayList<>();
 
-    //@JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Enumerated(EnumType.STRING)
     private DeliveryStatus status;
 
-    //@JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private OffsetDateTime orderDate;
 
-    //@JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private OffsetDateTime deliveryDate;
 
     public Occurrence addOccurrence(String description) {
@@ -57,5 +49,18 @@ public class Delivery {
         this.getOccurrences().add(occurrence);
 
         return occurrence;
+    }
+
+    public void setFinished() {
+        if (!canBeFinished()) {
+            throw new DomainException("Entrega não pode ser finalizada");
+        }
+
+        setStatus(DeliveryStatus.FINISHED);
+        setDeliveryDate(OffsetDateTime.now());
+    }
+
+    public boolean canBeFinished() {
+        return DeliveryStatus.PENDING.equals(getStatus());
     }
 }
