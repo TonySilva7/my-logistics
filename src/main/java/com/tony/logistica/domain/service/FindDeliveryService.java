@@ -1,6 +1,7 @@
 package com.tony.logistica.domain.service;
 
 import com.tony.logistica.domain.exception.DomainException;
+import com.tony.logistica.domain.exception.MyEntityNotFoundException;
 import com.tony.logistica.domain.model.Delivery;
 import com.tony.logistica.domain.repository.DeliveryRepository;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,6 @@ public class FindDeliveryService {
 
     public Delivery findDelivery(Long id) {
         return deliveryRepository.findById(id)
-                .orElseThrow(() -> new DomainException("Entrega não encontrada"));
+                .orElseThrow(() -> new MyEntityNotFoundException("Entrega não encontrada"));
     }
 }

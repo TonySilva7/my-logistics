@@ -1,6 +1,7 @@
 package com.tony.logistica.api.exceptionhandler;
 
 import com.tony.logistica.domain.exception.DomainException;
+import com.tony.logistica.domain.exception.MyEntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleDomainException(DomainException dmEx, WebRequest request) {
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
+        Problem problem = new Problem();
+        problem.setStatus(status.value());
+        problem.setTimeStamp(OffsetDateTime.now());
+        problem.setTitle(dmEx.getMessage());
+
+        return handleExceptionInternal(dmEx, problem, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(MyEntityNotFoundException.class)
+    public ResponseEntity<Object> handleDomainException(MyEntityNotFoundException dmEx, WebRequest request) {
+
+        HttpStatus status = HttpStatus.NOT_FOUND;
         Problem problem = new Problem();
         problem.setStatus(status.value());
         problem.setTimeStamp(OffsetDateTime.now());
